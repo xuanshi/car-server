@@ -3,7 +3,7 @@ var exec = require('child_process').exec;
 
 function Controller() {
     var recievedMessage;
-    var child = exec('./echo.sh', function(error, stdout, stderr) {
+    var child = exec('./AnkiVehicleController', function(error, stdout, stderr) {
         console.log('Terminating car control command.');
         console.log('  stdout: ' + stdout);
         console.log('  stderr: ' + stderr);
