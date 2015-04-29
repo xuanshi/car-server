@@ -21,5 +21,6 @@ router.use(function(req, res, next) {
 
 router.route('/').get(handlers.rootHandler);
 router.route('/:carId/:command').all(handlers.carController);
+router.route('/:command').all(handlers.carController);
 
 app.all('*', router);

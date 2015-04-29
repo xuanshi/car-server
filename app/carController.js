@@ -12,12 +12,17 @@ function Controller() {
         }
     });
     child.stdout.on('data', function(data) {
-        recievedMessage = data;
-        
-        console.log('car control command response: ' + recievedMessage);
+        console.log('stdout -- ' + data);
+        recievedMessage = {};
+        try {
+            recievedMessage.status = "success";
+            recievedMessage.data = JSON.parse(data);
+        } catch (e) {
+            recievedMessage.status = "fail";
+        }      
     });
     child.stderr.on('data', function(data) {
-        console.log('car control command response: ' + data);
+        console.log('stderr -- ' + data);
     });
     child.on('close', function(code) {
         console.log('closing car control command: ' + code);

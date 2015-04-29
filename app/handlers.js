@@ -16,12 +16,11 @@ exports.rootHandler = function(req, res) {
 
 exports.carController = function(req, res) {
 	console.log(req.params);
-	var carId = req.params.carId;
 	var command = req.params.command;
+    var carId = req.params.carId;
 	var value = req.query.value;
 	var callback = carController.handle(carId, command, value);
 	setTimeout(function(){
-	    var result = {message:callback()};
-        res.json(result);
+        res.json(callback());
     }, 500);
 };

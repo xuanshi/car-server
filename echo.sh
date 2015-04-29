@@ -4,5 +4,5 @@ echo "Started echo deamon process"
 
 while true; do
   read text
-  echo $text
+  echo $text 
 done
