@@ -21,6 +21,7 @@ exports.carController = function(req, res) {
 	var value = req.query.value;
 	var callback = carController.handle(carId, command, value);
 	setTimeout(function(){
+	    res.header('Access-Control-Allow-Origin','*');
         res.json(callback());
     }, 500);
 };
