@@ -3,7 +3,7 @@ var exec = require('child_process').exec;
 
 function Controller() {
     var recievedMessage;
-    var child = exec('./AnkiVehicleController', function(error, stdout, stderr) {
+    var child = exec('./echo.sh', function(error, stdout, stderr) {
         console.log('Terminating car control command.');
         console.log('  stdout: ' + stdout);
         console.log('  stderr: ' + stderr);
@@ -13,16 +13,18 @@ function Controller() {
     });
     child.stdout.on('data', function(data) {
         console.log('stdout -- ' + data);
-        recievedMessage = {};
-        try {
-            recievedMessage.status = "success";
-            recievedMessage.data = JSON.parse(data);
-        } catch (e) {
-            recievedMessage.status = "fail";
-        }      
     });
     child.stderr.on('data', function(data) {
         console.log('stderr -- ' + data);
+        var start = data.indexOf('**') + 2;
+        var end = data.lastIndexOf('**');
+        recievedMessage = {};
+        try {
+            recievedMessage.status = "success";
+            recievedMessage.data = JSON.parse(data.substring(start, end));
+        } catch (e) {
+            recievedMessage.status = "fail";
+        }
     });
     child.on('close', function(code) {
         console.log('closing car control command: ' + code);
