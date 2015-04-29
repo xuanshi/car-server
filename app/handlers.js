@@ -19,6 +19,9 @@ exports.carController = function(req, res) {
 	var carId = req.params.carId;
 	var command = req.params.command;
 	var value = req.query.value;
-	var result = carController.handle(carId, command, value);
-	res.json(result);
+	var callback = carController.handle(carId, command, value);
+	setTimeout(function(){
+	    var result = {message:callback()};
+        res.json(result);
+    }, 500);
 };
