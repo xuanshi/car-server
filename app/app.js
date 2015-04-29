@@ -1,14 +1,20 @@
 'use strict';
 var express    = require('express');
-var http       = require('http');
+var https       = require('https');
 var bodyParser = require('body-parser');
 var handlers   = require('./handlers');
+var fs = require('fs');
+var path = require('path');
 
 var app    = express();
 var router = express.Router();
-var server = app.listen(8080,  function() {
-  console.log('Listening on port %d', server.address().port);
-});
+var cert = path.join(__dirname, "cert.pem");
+var key = path.join(__dirname, "key.pem");
+var securedServer = https.createServer({
+    key : fs.readFileSync(key, 'utf8'),
+    cert : fs.readFileSync(cert, 'utf8')
+}, app);
+securedServer.listen(8888);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,6 +26,7 @@ router.use(function(req, res, next) {
 });
 
 router.route('/').get(handlers.rootHandler);
+router.route('/:carId/voice').post(handlers.voiceCommand);
 router.route('/:carId/:command').all(handlers.carController);
 router.route('/:command').all(handlers.carController);
 

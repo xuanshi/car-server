@@ -29,6 +29,12 @@ function Controller() {
     child.on('close', function(code) {
         console.log('closing car control command: ' + code);
     });
+    
+    process.on('exit', function() {
+        if (child) {
+            child.kill('SIGKILL');
+        }
+    });
     this.child = child;
     this.getRetMessage = function() {
         return recievedMessage;
