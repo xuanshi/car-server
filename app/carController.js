@@ -48,6 +48,7 @@ Controller.prototype.handle = function(carId, command, value) {
         'value' : value
     }
     this.child.stdin.write(JSON.stringify(toSend) + '\n');
+    console.log('sent command', toSend);
     return this.getRetMessage;
 }
 

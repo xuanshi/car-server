@@ -13,7 +13,6 @@ exports.rootHandler = function(req, res) {
 };
 
 exports.carController = function(req, res) {
-	console.log(req.params);
 	var command = req.params.command;
     var carId = req.params.carId;
 	var value = req.query.value;
@@ -30,14 +29,13 @@ function respond(req, res, callback) {
 
 exports.voiceCommand = function(req, res, next) {
     var voiceCommand = JSON.stringify(req.body).toLowerCase();
-    console.log(voiceCommand);
     var message;
     if (voiceCommand.indexOf('go') != -1) {
         message = "Moving!";
-        carController.handle(req.query.carId, 'set-speed', 50);
+        carController.handle(req.params.carId, 'set-speed', 50);
     } else if (voiceCommand.indexOf('stop') != -1) {
         message = "Stopping!";
-        carController.handle(req.query.carId, 'set-speed', 0);
+        carController.handle(req.params.carId, 'set-speed', 0);
     } else {
         message = "No change!";
     }

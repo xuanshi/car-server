@@ -1,9 +1,37 @@
 <html>
 <textarea id="textarea" rows=10 cols=80></textarea>
 <br>
+<select id="cars">
+ 
+</select>
+<br>
 <button id="button" onclick="toggleStartStop()"></button>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript">
+var xmlhttp;
+if (window.XMLHttpRequest) {
+  // code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+}
+else {
+  // code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadystatechange=function() {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+    var ret = JSON.parse(xmlhttp.responseText);
+    if (ret.data && Object.prototype.toString.call( ret.data ) === '[object Array]') {
+      for (var i in ret.data) {
+        var carId = ret.data[i].id;
+        document.getElementById("cars").innerHTML ='<option value="' + carId + '">Car ' + carId +'</option>';
+      }
+    }
+  }
+}
+xmlhttp.open("GET","/list-cars",false);
+xmlhttp.send();
+
+
 var recognizing;
 var recognition = new webkitSpeechRecognition();
 
@@ -22,14 +50,14 @@ recognition.onresult = function (event) {
             }),
             dataType: 'json',
             success: function(data){
-                app.log("device control succeeded");
+                app.log(data);
             },
             error: function(){
-                app.log("Device control failed");
+                app.log("Device control failed!");
             },
             processData: false,
             type: 'POST',
-            url: '/command',
+            url: document.getElementById("cars").value + '/voice',
             port: 443
         });
 
